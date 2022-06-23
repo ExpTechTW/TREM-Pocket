@@ -33,6 +33,7 @@
 
 # Web related
 lib/generated_plugin_registrant.dart
+lib/core/service.dart
 
 # Symbolication related
 app.*.symbols
@@ -44,6 +45,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-/lib/core/service.dart
 /android/key.properties
 /android/TREM.jks
