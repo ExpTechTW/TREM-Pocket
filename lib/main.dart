@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
+import 'package:trem/core/service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,23 +38,31 @@ void onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized();
 
   if (service is AndroidServiceInstance) {
-    service.on('setAsForeground').listen((event) {
+    service.on('start').listen((event) {
       service.setAsForegroundService();
     });
   }
 
-  service.on('stopService').listen((event) {
+  service.on('stop').listen((event) {
     service.stopSelf();
   });
 
-  Timer.periodic(const Duration(seconds: 1), (timer) async {
+  service.on('notify').listen((event) {
     if (service is AndroidServiceInstance) {
+      var data=json.decode(json.encode(event));
       service.setForegroundNotificationInfo(
         title: "TREM Pocket",
-        content: "Updated at ${DateTime.now()}",
+        content: data.body,
       );
     }
   });
+
+  if (service is AndroidServiceInstance) {
+    service.setForegroundNotificationInfo(
+      title: "TREM Pocket",
+      content: "地震速報 運行中",
+    );
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -66,7 +76,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      FlutterBackgroundService().invoke("setAsForeground");
+      FlutterBackgroundService().invoke("start");
+      service();
     });
     return const MaterialApp(
       home: Scaffold(body: Text("123")),

@@ -1,6 +1,4 @@
 # Miscellaneous
-service.dart
-
 *.class
 *.log
 *.pyc
@@ -46,3 +44,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/lib/core/service.dart
