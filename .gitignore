@@ -1,4 +1,6 @@
 # Miscellaneous
+service.dart
+
 *.class
 *.log
 *.pyc
