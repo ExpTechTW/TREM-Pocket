@@ -1,9 +1,9 @@
-# 模板
+# TREM Pocket
 <img alt="Discord" src="https://img.shields.io/discord/926545182407688273">
 
 ------
 
-- 這是一個 ExpTech Github 模板
+- Taiwan Real-time Earthquake Monitoring Pocket ( 台灣實時地震監測 行動版 )
 
 ## 索引
 - [貢獻者](#貢獻者)
