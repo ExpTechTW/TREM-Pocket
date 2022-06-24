@@ -6,9 +6,17 @@
 - Taiwan Real-time Earthquake Monitoring Pocket ( 台灣實時地震監測 行動版 )
 
 ## 索引
+- [文檔](#文檔)
+- [發行](#發行)
 - [貢獻者](#貢獻者)
 - [發佈規則](#發佈規則)
 - [合作](#合作)
+
+## 文檔
+
+## 發行
+- [Android APK]()
+- [Android Google Play](https://play.google.com/store/apps/details?id=com.exptech.tw.trem)
 
 ## 貢獻者
 - whes1015 `文檔`
