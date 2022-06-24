@@ -47,3 +47,4 @@ app.*.map.json
 /android/app/release
 /android/key.properties
 /android/TREM.jks
+/android/app/google-services.json
