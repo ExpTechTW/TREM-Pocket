@@ -1,14 +1,27 @@
-# 模板
+# TREM Pocket
 <img alt="Discord" src="https://img.shields.io/discord/926545182407688273">
 
 ------
 
-- 這是一個 ExpTech Github 模板
+- Taiwan Real-time Earthquake Monitoring Pocket ( 台灣實時地震監測 行動版 )
 
 ## 索引
+- [文檔](#文檔)
+- [系統](#系統)
+- [發行](#發行)
 - [貢獻者](#貢獻者)
 - [發佈規則](#發佈規則)
 - [合作](#合作)
+
+## 文檔
+
+## 系統
+### Android
+- Android 4.4 `SDK >= 19`
+
+## 發行
+- [Android APK]()
+- [Android Google Play](https://play.google.com/store/apps/details?id=com.exptech.tw.trem)
 
 ## 貢獻者
 - whes1015 `文檔`
