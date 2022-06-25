@@ -33,16 +33,28 @@ void onStart(ServiceInstance service) async {
     } else if (data["Function"] == "earthquake") {
       time = Unix();
       PerfectVolumeControl.hideUI = true;
-      double val=await PerfectVolumeControl.volume;
+      double val = await PerfectVolumeControl.volume;
       PerfectVolumeControl.setVolume(1);
       await player.play(BytesSource(await Audio("audios/EEW.wav")));
-      PerfectVolumeControl.setVolume(val);
+      player.onPlayerComplete.listen((event) {
+        PerfectVolumeControl.setVolume(val);
+      });
       if (service is AndroidServiceInstance) {
         service.setForegroundNotificationInfo(
           title: "TREM Pocket",
           content: "地震速報",
         );
       }
+    }
+    if (data["Audio"] != null) {
+      time = Unix();
+      PerfectVolumeControl.hideUI = true;
+      double val = await PerfectVolumeControl.volume;
+      await PerfectVolumeControl.setVolume(1);
+      await player.play(BytesSource(await Audio(data["Audio"])));
+      player.onPlayerComplete.listen((event) {
+        PerfectVolumeControl.setVolume(val);
+      });
     }
   });
 

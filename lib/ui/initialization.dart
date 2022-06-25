@@ -4,7 +4,7 @@ import 'package:trem/ui/eew.dart';
 import 'package:trem/ui/report.dart';
 import 'package:uuid/uuid.dart';
 
-import 'home.dart';
+import 'log.dart';
 
 class InitializationPage extends StatefulWidget {
   const InitializationPage({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class InitializationPage extends StatefulWidget {
 
 class _InitializationPage extends State<InitializationPage> {
   int _currentIndex = 0;
-  final pages = [const HomePage(), const EEWPage(), const ReportPage()];
+  final pages = [const LogPage(), const EEWPage(), const ReportPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,6 @@ class _InitializationPage extends State<InitializationPage> {
       if (config.get('UUID') == null) {
         config.put('UUID', const Uuid().v4());
       }
-      print(config.get('UUID'));
     });
     return Scaffold(
       body: pages[_currentIndex],
@@ -34,10 +33,10 @@ class _InitializationPage extends State<InitializationPage> {
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '首頁'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: '警報'),
-          //BottomNavigationBarItem(icon: Icon(Icons.chat), label: '發佈'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), label: '報告'),
+              icon: Icon(Icons.computer_outlined), label: '功能'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle), label: '我的'),
         ],
         currentIndex: _currentIndex,
         fixedColor: Colors.black,

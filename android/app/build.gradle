@@ -17,7 +17,7 @@ apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 31
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -28,8 +28,8 @@ android {
         applicationId "com.exptech.tw.trem"
         minSdkVersion 19
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 2
-        versionName "22w26-pre1"
+        versionCode 3
+        versionName "22w26-pre2"
     }
 
     def keystoreProperties = new Properties()
