@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:clipboard/clipboard.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,6 +40,9 @@ Future<void> main() async {
     sound: true,
   );
   FirebaseMessaging.onBackgroundMessage(_BackgroundHandler);
+  FirebaseMessaging.onMessage.listen((event) {
+    FlutterBackgroundService().invoke("data", event.data);
+  });
   FirebaseToken = (await FirebaseMessaging.instance.getToken())!;
   logInfo('FirebaseToken: ' + FirebaseToken);
   FlutterClipboard.copy(FirebaseToken);
@@ -49,7 +51,6 @@ Future<void> main() async {
   await FirebaseMessaging.instance.subscribeToTopic("JP_EEW");
   await FirebaseMessaging.instance.subscribeToTopic("Palert");
   await FirebaseMessaging.instance.subscribeToTopic("Report");
-  //NetWork('{"APIkey":"123"}');
   runApp(const MyApp());
 }
 

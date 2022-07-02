@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -10,6 +11,30 @@ import 'package:trem/core/service.dart';
 
 import 'api.dart';
 import 'audio.dart';
+import 'earthquake.dart';
+
+List<String> AudioList = [];
+final player = AudioPlayer();
+
+PlayAudio(String src) async {
+  PerfectVolumeControl.hideUI = true;
+  double val = await PerfectVolumeControl.volume;
+  await PerfectVolumeControl.setVolume(1);
+  AudioList.add(src);
+  play() async {
+    await player.play(BytesSource(await Audio(AudioList.first)));
+  }
+
+  play();
+  player.onPlayerComplete.listen((event) {
+    if (AudioList.isNotEmpty) {
+      AudioList.removeAt(0);
+    }
+    if (AudioList.isNotEmpty) {
+      play();
+    }
+  });
+}
 
 void onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized();
@@ -25,8 +50,8 @@ void onStart(ServiceInstance service) async {
   });
 
   service.on('data').listen((event) async {
+    print(event);
     var data = event;
-    print(data);
     if (data!["Function"] == "NTP") {
       NTP = data["Full"];
       Now = DateTime.now().millisecondsSinceEpoch;
@@ -51,11 +76,25 @@ void onStart(ServiceInstance service) async {
       PerfectVolumeControl.hideUI = true;
       double val = await PerfectVolumeControl.volume;
       await PerfectVolumeControl.setVolume(1);
-      await player.play(BytesSource(await Audio(data["Audio"])));
+      PlayAudio(data["Audio"]);
+      var Data = jsonDecode(data["Data"]);
+      if (Data["Function"] == "earthquake") {
+        print(Earthquake(Data,1.0));
+        PlayAudio("audios/PGA1.wav");
+      }
       player.onPlayerComplete.listen((event) {
         PerfectVolumeControl.setVolume(val);
       });
     }
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => const HomePage(),
+    //       maintainState: false,
+    //       settings: const RouteSettings(
+    //         arguments: {},
+    //       ),
+    //     ));
   });
 
   Timer.periodic(const Duration(seconds: 1), (timer) async {
