@@ -3,11 +3,12 @@ import 'dart:math';
 import 'package:trem/core/api.dart';
 
 Earthquake(json, S) {
+  print(json["NorthLatitude"]);
   double point = sqrt(pow(
-          (Lat + double.parse(json["NorthLatitude"]) * -1).abs() * 111, 2) +
-      pow((Long + double.parse(json["EastLongitude"]) * -1).abs() * 101, 2));
-  double distance = sqrt(pow(int.parse(json["Depth"]), 2) + pow(point, 2));
-  return PGAcount(double.parse(json["Scale"]), distance, S);
+          (Lat + double.parse(json["NorthLatitude"].toString()) * -1).abs() * 111, 2) +
+      pow((Long + double.parse(json["EastLongitude"].toString()) * -1).abs() * 101, 2));
+  double distance = sqrt(pow(int.parse(json["Depth"].toString()), 2) + pow(point, 2));
+  return PGAcount(double.parse(json["Scale"].toString()), distance, S);
 }
 
 PGAcount(Scale, distance, Si) {
@@ -16,6 +17,7 @@ PGAcount(Scale, distance, Si) {
   double PGA = double.parse(
       (1.657 * pow(e, (1.533 * Scale)) * pow(distance, -1.607) * S)
           .toStringAsFixed(3));
+  print(PGA);
   return PGA >= 800
       ? "7"
       : 800 >= PGA && 440 < PGA

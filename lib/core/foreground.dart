@@ -15,6 +15,7 @@ import 'earthquake.dart';
 
 List<String> AudioList = [];
 final player = AudioPlayer();
+bool Lock = false;
 
 PlayAudio(String src) async {
   PerfectVolumeControl.hideUI = true;
@@ -22,17 +23,19 @@ PlayAudio(String src) async {
   await PerfectVolumeControl.setVolume(1);
   AudioList.add(src);
   play() async {
+    Lock = true;
     await player.play(BytesSource(await Audio(AudioList.first)));
+    AudioList.removeAt(0);
   }
 
-  play();
-  player.onPlayerComplete.listen((event) {
-    if (AudioList.isNotEmpty) {
-      AudioList.removeAt(0);
-    }
+  Timer.periodic(const Duration(microseconds: 1), (timer) async {
+    if (Lock) return;
     if (AudioList.isNotEmpty) {
       play();
     }
+  });
+  player.onPlayerComplete.listen((event) {
+    Lock = false;
   });
 }
 
@@ -50,7 +53,6 @@ void onStart(ServiceInstance service) async {
   });
 
   service.on('data').listen((event) async {
-    print(event);
     var data = event;
     if (data!["Function"] == "NTP") {
       NTP = data["Full"];
@@ -79,7 +81,7 @@ void onStart(ServiceInstance service) async {
       PlayAudio(data["Audio"]);
       var Data = jsonDecode(data["Data"]);
       if (Data["Function"] == "earthquake") {
-        print(Earthquake(Data,1.0));
+        Earthquake(Data, 1.0);
         PlayAudio("audios/PGA1.wav");
       }
       player.onPlayerComplete.listen((event) {
