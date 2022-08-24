@@ -13,5 +13,4 @@ class _ReportPage extends State<ReportPage> {
     // TODO: implement build
     throw UnimplementedError();
   }
-
 }

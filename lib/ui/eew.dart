@@ -13,5 +13,4 @@ class _EEWPage extends State<EEWPage> {
     // TODO: implement build
     throw UnimplementedError();
   }
-
 }

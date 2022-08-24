@@ -3,11 +3,16 @@ import 'dart:math';
 import 'package:trem/core/api.dart';
 
 Earthquake(json, S) {
-  print(json["NorthLatitude"]);
   double point = sqrt(pow(
-          (Lat + double.parse(json["NorthLatitude"].toString()) * -1).abs() * 111, 2) +
-      pow((Long + double.parse(json["EastLongitude"].toString()) * -1).abs() * 101, 2));
-  double distance = sqrt(pow(int.parse(json["Depth"].toString()), 2) + pow(point, 2));
+          (Lat + double.parse(json["NorthLatitude"].toString()) * -1).abs() *
+              111,
+          2) +
+      pow(
+          (Long + double.parse(json["EastLongitude"].toString()) * -1).abs() *
+              101,
+          2));
+  double distance =
+      sqrt(pow(int.parse(json["Depth"].toString()), 2) + pow(point, 2));
   return PGAcount(double.parse(json["Scale"].toString()), distance, S);
 }
 

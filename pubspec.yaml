@@ -11,20 +11,20 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_background_service: ^2.1.3
-  device_info_plus: ^4.0.0
+  device_info_plus: ^4.1.2
   web_socket_channel: ^2.2.0
   audioplayers: ^1.0.1
   intl: ^0.17.0
   perfect_volume_control: ^1.0.5
   uuid: ^3.0.6
   hive_flutter: ^1.1.0
-  hive: ^2.2.2
-  firebase_messaging: ^11.4.2
-  firebase_core: ^1.18.0
+  hive: ^2.2.3
+  firebase_messaging: ^12.0.3
+  firebase_core: ^1.21.0
   loggy: ^2.0.1+1
   flutter_loggy: ^2.0.1
-  http: ^0.13.4
-  geolocator: ^8.2.1
+  http: ^0.13.5
+  geolocator: ^9.0.1
   clipboard: ^0.1.3
 
   cupertino_icons: ^1.0.5
@@ -33,7 +33,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true

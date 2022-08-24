@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -40,8 +39,6 @@ PlayAudio(String src) async {
 }
 
 void onStart(ServiceInstance service) async {
-  DartPluginRegistrant.ensureInitialized();
-
   if (service is AndroidServiceInstance) {
     service.on('start').listen((event) {
       service.setAsForegroundService();
@@ -82,7 +79,6 @@ void onStart(ServiceInstance service) async {
       var Data = jsonDecode(data["Data"]);
       if (Data["Function"] == "earthquake") {
         Earthquake(Data, 1.0);
-        PlayAudio("audios/PGA1.wav");
       }
       player.onPlayerComplete.listen((event) {
         PerfectVolumeControl.setVolume(val);

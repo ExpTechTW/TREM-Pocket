@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:loggy/loggy.dart';
 import 'package:trem/core/api.dart';
 import 'package:trem/ui/initialization.dart';
@@ -44,13 +45,23 @@ Future<void> main() async {
     FlutterBackgroundService().invoke("data", event.data);
   });
   FirebaseToken = (await FirebaseMessaging.instance.getToken())!;
-  logInfo('FirebaseToken: ' + FirebaseToken);
+  logInfo('FirebaseToken: $FirebaseToken');
   FlutterClipboard.copy(FirebaseToken);
-  await FirebaseMessaging.instance.subscribeToTopic("TW_EEW");
-  await FirebaseMessaging.instance.subscribeToTopic("CN_EEW");
-  await FirebaseMessaging.instance.subscribeToTopic("JP_EEW");
-  await FirebaseMessaging.instance.subscribeToTopic("Palert");
-  await FirebaseMessaging.instance.subscribeToTopic("Report");
+  await Hive.initFlutter();
+  await Hive.openBox('config');
+  var config = Hive.box('config');
+  if (config.get('init') == null) {
+    config.put('init', true);
+    await FirebaseMessaging.instance.subscribeToTopic("CWB_EEW");
+    await FirebaseMessaging.instance.subscribeToTopic("ICL_EEW");
+    await FirebaseMessaging.instance.subscribeToTopic("JMA_EEW");
+    await FirebaseMessaging.instance.subscribeToTopic("Palert");
+    await FirebaseMessaging.instance.subscribeToTopic("Report");
+    await FirebaseMessaging.instance.subscribeToTopic("NIED_EEW");
+    await FirebaseMessaging.instance.subscribeToTopic("KMA_EEW");
+    await FirebaseMessaging.instance.subscribeToTopic("FJDZJ_EEW");
+    await FirebaseMessaging.instance.subscribeToTopic("Tsunami");
+  }
   runApp(const MyApp());
 }
 
