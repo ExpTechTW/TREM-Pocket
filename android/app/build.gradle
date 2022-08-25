@@ -29,7 +29,7 @@ android {
         minSdkVersion 19
         targetSdkVersion flutter.targetSdkVersion
         versionCode 3
-        versionName "22w26-pre2"
+        versionName "22w35-pre1"
     }
 
     def keystoreProperties = new Properties()

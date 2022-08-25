@@ -8,7 +8,6 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:perfect_volume_control/perfect_volume_control.dart';
 
-import 'api.dart';
 import 'audio.dart';
 import 'earthquake.dart';
 import 'network.dart';
@@ -52,6 +51,13 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
+  if (service is AndroidServiceInstance) {
+    service.setForegroundNotificationInfo(
+      title: "TREM Pocket",
+      content: "執行中 | 默默守護你的安全",
+    );
+  }
+
   TIME() async {
     var Now = DateTime.now().millisecondsSinceEpoch;
     var data = jsonDecode(await Get("https://exptech.com.tw/get?Function=NTP"));
@@ -71,10 +77,6 @@ void onStart(ServiceInstance service) async {
       return int.parse(i.toString().replaceAll("級", ""));
     }
   }
-
-  service.on('click').listen((event) {
-    print(123);
-  });
 
   service.on('data').listen((event) async {
     var data = event;

@@ -14,7 +14,7 @@ class InitializationPage extends StatefulWidget {
 
 class _InitializationPage extends State<InitializationPage> {
   int _currentIndex = 0;
-  final pages = [const HomePage(), const EEWPage(), const SetPage()];
+  final pages = [const EEWPage(), const HomePage(), const SetPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +33,9 @@ class _InitializationPage extends State<InitializationPage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '首頁'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.computer_outlined), label: '功能'),
+              icon: Icon(Icons.computer_outlined), label: '報告'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), label: '我的'),
+              icon: Icon(Icons.account_circle), label: '設定'),
         ],
         currentIndex: _currentIndex,
         fixedColor: Colors.black,
