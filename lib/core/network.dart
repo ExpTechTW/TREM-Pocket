@@ -16,7 +16,7 @@ Future<Map<String, dynamic>> NetWork(String json) async {
         .post(Uri.parse("https://exptech.com.tw/post"),
             headers: {"content-type": "application/json"},
             body: utf8.encode(jsonEncode(Json)))
-        .timeout(const Duration(seconds: 5));
+        .timeout(const Duration(seconds: 2));
     String reply = response.body;
     var Data = jsonDecode(reply);
     if (Data["state"] == "Success") {
@@ -31,6 +31,18 @@ Future<Map<String, dynamic>> NetWork(String json) async {
     String msg = e.message;
     Log(LogLevel.error, msg);
     return jsonDecode(msg);
+  }
+}
+
+Future Get(String url) async {
+  try {
+    var response = await http
+        .get(Uri.parse(url)).timeout(const Duration(seconds: 2));
+    return response.body;
+  } on SocketException catch (e) {
+    String msg = e.message;
+    Log(LogLevel.error, msg);
+    return msg;
   }
 }
 

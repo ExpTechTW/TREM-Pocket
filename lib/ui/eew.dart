@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class EEWPage extends StatefulWidget {
   const EEWPage({Key? key}) : super(key: key);
@@ -10,7 +11,8 @@ class EEWPage extends StatefulWidget {
 class _EEWPage extends State<EEWPage> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return const Scaffold(
+      body: Text(""),
+    );
   }
 }

@@ -52,6 +52,15 @@ Future<void> main() async {
   var config = Hive.box('config');
   if (config.get('init') == null) {
     config.put('init', true);
+    config.put('CWB_EEW', true);
+    config.put('ICL_EEW', true);
+    config.put('JMA_EEW', true);
+    config.put('Palert', true);
+    config.put('Report', true);
+    config.put('NIED_EEW', true);
+    config.put('KMA_EEW', true);
+    config.put('FJDZJ_EEW', true);
+    config.put('Tsunami', true);
     await FirebaseMessaging.instance.subscribeToTopic("CWB_EEW");
     await FirebaseMessaging.instance.subscribeToTopic("ICL_EEW");
     await FirebaseMessaging.instance.subscribeToTopic("JMA_EEW");
