@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:trem/ui/eew.dart';
+import 'package:trem/ui/home.dart';
 import 'package:trem/ui/setting.dart';
 import 'package:uuid/uuid.dart';
-
-import 'log.dart';
 
 class InitializationPage extends StatefulWidget {
   const InitializationPage({Key? key}) : super(key: key);
@@ -15,7 +14,7 @@ class InitializationPage extends StatefulWidget {
 
 class _InitializationPage extends State<InitializationPage> {
   int _currentIndex = 0;
-  final pages = [const LogPage(), const EEWPage(), const SetPage()];
+  final pages = [const HomePage(), const EEWPage(), const SetPage()];
 
   @override
   Widget build(BuildContext context) {

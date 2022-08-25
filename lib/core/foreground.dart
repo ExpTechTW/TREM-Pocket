@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:perfect_volume_control/perfect_volume_control.dart';
 
 import 'api.dart';
@@ -14,12 +16,12 @@ import 'network.dart';
 double TN = 0;
 
 List<String> AudioList = [];
+List<String> TimeStamp = [];
 final player = AudioPlayer();
 bool Lock = false;
 
 PlayAudio(String src) async {
-  player.setPlaybackRate(1.1);
-  PerfectVolumeControl.hideUI = true;
+  player.setPlaybackRate(1.2);
   AudioList.add(src);
   play() async {
     Lock = true;
@@ -56,23 +58,66 @@ void onStart(ServiceInstance service) async {
     TN = data["Full"] + (DateTime.now().millisecondsSinceEpoch - Now) / 2;
   }
 
+  int Intensity(i) {
+    if (i == "5-" || i == "5弱") {
+      return 5;
+    } else if (i == "5+" || i == "5強") {
+      return 6;
+    } else if (i == "6-" || i == "6弱") {
+      return 7;
+    } else if (i == "6+" || i == "6強") {
+      return 8;
+    } else {
+      return int.parse(i);
+    }
+  }
+
   service.on('data').listen((event) async {
     var data = event;
-    if (data!["Audio"] != null) {
-      time = Unix();
+    time = Unix();
+    await Hive.initFlutter();
+    await Hive.openBox('config');
+    var config = Hive.box('config');
+    var val;
+    await TIME();
+    var Data = jsonDecode(data!["Data"]);
+    if (TimeStamp.contains(Data["TimeStamp"])) return;
+    TimeStamp.add(Data["TimeStamp"]);
+    if (TN - int.parse(Data["TimeStamp"].toString()) > 240000) return;
+    if (config.get('setVolume')) {
       PerfectVolumeControl.hideUI = true;
-      double val = await PerfectVolumeControl.volume;
-      //await PerfectVolumeControl.setVolume(1);
-      PlayAudio(data["Audio"]);
-      var Data = jsonDecode(data["Data"]);
-      await TIME();
+      val = await PerfectVolumeControl.volume;
+      await PerfectVolumeControl.setVolume(1);
+    }
+    if (Data["Function"] == "earthquake" && !config.get('CWB_EEW')) return;
+    if (Data["Function"] == "JMA_earthquake" && !config.get('JMA_EEW')) {
+      return;
+    }
+    if (Data["Function"] == "KMA_earthquake" && !config.get('KMA_EEW')) {
+      return;
+    }
+    if (Data["Function"] == "ICL_earthquake" && !config.get('ICL_EEW')) {
+      return;
+    }
+    if (Data["Function"] == "FJDZJ_earthquake" && !config.get('FJDZJ_EEW')) {
+      return;
+    }
+    if (Data["Function"] == "palert" && !config.get('Palert')) return;
+    if (Data["Function"] == "report" && !config.get('Report')) return;
+    if (Data["Function"] == "NIED_earthquake" && !config.get('NIED_EEW')) {
+      return;
+    }
+    if (Data["Function"] == "TSUNAMI" && !config.get('Tsunami')) return;
+    if (Data["Function"].toString().contains("earthquake")) {
       var T = Timer.periodic(const Duration(milliseconds: 500), (timer) async {
         TIME();
       });
       var ans = await Earthquake(Data);
       var s = ans[0];
-      PlayAudio(
-          "audios/1/${s.toString().replaceAll("-", "").replaceAll("+", "")}.wav");
+      var S = s.toString().replaceAll("-", "").replaceAll("+", "");
+      if (Intensity(S) < Intensity(config.get("intensity"))) return;
+      PlayAudio("audios/EEW.wav");
+      PlayAudio("audios/1/$S.wav");
       if (s.toString().contains("+")) {
         PlayAudio("audios/1/intensity-strong.wav");
       } else if (s.toString().contains("-")) {
@@ -86,8 +131,14 @@ void onStart(ServiceInstance service) async {
           PlayAudio("audios/Alert.wav");
         }
       }
-      var a = ((ans[2] - ((TN - Data["Time"]) / 1000) * 3.5) / 3.5).toInt();
-      if (a <= 99) {
+      var Wave = 3.5;
+      if (config.get('wave')) {
+        if (ans[2] >= 50) Wave = 4;
+      }
+      var a = ((ans[2] - ((TN - Data["Time"]) / 1000) * Wave) / Wave).toInt();
+      if (a <= 0) {
+        PlayAudio("audios/1/arrive.wav");
+      } else if (a <= 99) {
         if (a >= 20) {
           PlayAudio("audios/1/${a.toString().substring(0, 1)}x.wav");
           PlayAudio("audios/1/x${a.toString().substring(1, 2)}.wav");
@@ -104,7 +155,7 @@ void onStart(ServiceInstance service) async {
       var D;
       D = Timer.periodic(const Duration(milliseconds: 100), (timer) async {
         var value =
-            ((ans[2] - ((TN - Data["Time"]) / 1000) * 3.5) / 3.5).toInt();
+            ((ans[2] - ((TN - Data["Time"]) / 1000) * Wave) / Wave).toInt();
         if (value != note) {
           note = value;
           if (value < 100 && value > 0) {
@@ -123,18 +174,23 @@ void onStart(ServiceInstance service) async {
               PlayAudio("audios/1/ding.wav");
               count++;
             } else {
-              count++;
-              if (count >= 10) {
-                PerfectVolumeControl.setVolume(val);
-                D.cancel();
+              if (AudioList.isEmpty && count == 5) {
+                player.onPlayerComplete.listen((event) {
+                  if (val != null) PerfectVolumeControl.setVolume(val);
+                  D.cancel();
+                  T.cancel();
+                });
               }
             }
           }
         }
       });
+    } else if (Data["Function"] == "report") {
+      PlayAudio("audios/Report.wav");
+    } else if (Data["Function"] == "palert") {
+      PlayAudio("audios/palert.wav");
+    } else if (Data["Function"] == "TSUNAMI") {
+      PlayAudio("audios/Water.wav.wav");
     }
-    // player.onPlayerComplete.listen((event) {
-    //
-    // });
   });
 }

@@ -36,8 +36,8 @@ Future<Map<String, dynamic>> NetWork(String json) async {
 
 Future Get(String url) async {
   try {
-    var response = await http
-        .get(Uri.parse(url)).timeout(const Duration(seconds: 2));
+    var response =
+        await http.get(Uri.parse(url)).timeout(const Duration(seconds: 2));
     return response.body;
   } on SocketException catch (e) {
     String msg = e.message;

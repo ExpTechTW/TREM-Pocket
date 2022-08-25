@@ -29,6 +29,9 @@ class _SetPage extends State<SetPage> {
   bool _Report = false;
   bool _ICL = false;
   bool _Tsunami = false;
+  bool _setVolume = false;
+  bool _site = false;
+  bool _wave = false;
   List<String> Citys = [];
   List<String> Towns = [];
   List<String> Intensity = [
@@ -101,6 +104,15 @@ class _SetPage extends State<SetPage> {
       if (config.get('Tsunami')) {
         _Tsunami = true;
       }
+      if (config.get('setVolume')) {
+        _setVolume = true;
+      }
+      if (config.get('site_use')) {
+        _site = true;
+      }
+      if (config.get('wave')) {
+        _wave = true;
+      }
       if (city == "") {
         city = config.get("city") ?? "臺南市";
         town = config.get("town") ?? "歸仁區";
@@ -146,7 +158,7 @@ class _SetPage extends State<SetPage> {
               Text(
                 "強震即時警報",
                 style: TextStyle(
-                  fontSize: 40,
+                  fontSize: 35,
                 ),
               ),
             ],
@@ -231,7 +243,7 @@ class _SetPage extends State<SetPage> {
               Text(
                 "接收參數",
                 style: TextStyle(
-                  fontSize: 40,
+                  fontSize: 35,
                 ),
               ),
             ],
@@ -439,9 +451,9 @@ class _SetPage extends State<SetPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   CupertinoSwitch(
-                      value: _Tsunami,
+                      value: _site,
                       onChanged: (bool value) =>
-                          {_Tsunami = value, _Switch(value, "Tsunami")})
+                          {_site = value, _Switch(value, "site_use")})
                 ],
               ))
             ],
@@ -460,9 +472,41 @@ class _SetPage extends State<SetPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   CupertinoSwitch(
-                      value: _Tsunami,
+                      value: _wave,
                       onChanged: (bool value) =>
-                          {_Tsunami = value, _Switch(value, "Tsunami")})
+                          {_wave = value, _Switch(value, "wave")})
+                ],
+              ))
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text(
+                "音效",
+                style: TextStyle(
+                  fontSize: 35,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "自動調整音量",
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              Expanded(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CupertinoSwitch(
+                      value: _setVolume,
+                      onChanged: (bool value) =>
+                          {_setVolume = value, _Switch(value, "setVolume")})
                 ],
               ))
             ],
