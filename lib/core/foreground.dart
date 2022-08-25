@@ -72,9 +72,12 @@ void onStart(ServiceInstance service) async {
     }
   }
 
+  service.on('click').listen((event) {
+    print(123);
+  });
+
   service.on('data').listen((event) async {
     var data = event;
-    time = Unix();
     await Hive.initFlutter();
     await Hive.openBox('config');
     var config = Hive.box('config');
