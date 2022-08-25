@@ -68,7 +68,7 @@ void onStart(ServiceInstance service) async {
     } else if (i == "6+" || i == "6強") {
       return 8;
     } else {
-      return int.parse(i);
+      return int.parse(i.toString().replaceAll("級", ""));
     }
   }
 
@@ -82,7 +82,7 @@ void onStart(ServiceInstance service) async {
     await TIME();
     var Data = jsonDecode(data!["Data"]);
     if (TimeStamp.contains(Data["TimeStamp"])) return;
-    TimeStamp.add(Data["TimeStamp"]);
+    TimeStamp.add(Data["TimeStamp"].toString());
     if (TN - int.parse(Data["TimeStamp"].toString()) > 240000) return;
     if (config.get('setVolume')) {
       PerfectVolumeControl.hideUI = true;
@@ -143,7 +143,6 @@ void onStart(ServiceInstance service) async {
           PlayAudio("audios/1/${a.toString().substring(0, 1)}x.wav");
           PlayAudio("audios/1/x${a.toString().substring(1, 2)}.wav");
         } else if (a > 10) {
-          PlayAudio("audios/1/10.wav");
           PlayAudio("audios/1/x${a.toString().substring(1, 2)}.wav");
         } else {
           PlayAudio("audios/1/$a.wav");

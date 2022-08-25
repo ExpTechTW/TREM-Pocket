@@ -64,6 +64,7 @@ Future<void> main() async {
     config.put('setVolume', true);
     config.put('site_use', true);
     config.put('wave', true);
+    config.put('intensity', "0級");
     await FirebaseMessaging.instance.subscribeToTopic("CWB_EEW");
     await FirebaseMessaging.instance.subscribeToTopic("ICL_EEW");
     await FirebaseMessaging.instance.subscribeToTopic("JMA_EEW");
