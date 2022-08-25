@@ -61,6 +61,12 @@ class _SetPage extends State<SetPage> {
   }
 
   @override
+  void initState() {
+    Start = 0;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);
@@ -100,7 +106,8 @@ class _SetPage extends State<SetPage> {
         town = config.get("town") ?? "歸仁區";
       } else if (city != config.get("city")) {
         var list = [];
-        Data[config.get("city")].forEach((key, value) {
+        city = config.get("city") ?? "臺南市";
+        Data[city].forEach((key, value) {
           list.add(key);
         });
         town = list[0];
@@ -109,7 +116,6 @@ class _SetPage extends State<SetPage> {
         town = config.get("town");
       }
       intensity = config.get("intensity") ?? "0級";
-      city = config.get("city") ?? "臺南市";
       if (Start == 0) {
         Start = 1;
         Data = jsonDecode(await Get(

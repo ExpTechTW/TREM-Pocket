@@ -101,7 +101,8 @@ void onStart(ServiceInstance service) async {
       }
       var note = 0;
       var count = 0;
-      var D = Timer.periodic(const Duration(milliseconds: 100), (timer) async {
+      var D;
+      D = Timer.periodic(const Duration(milliseconds: 100), (timer) async {
         var value =
             ((ans[2] - ((TN - Data["Time"]) / 1000) * 3.5) / 3.5).toInt();
         if (value != note) {
@@ -122,7 +123,11 @@ void onStart(ServiceInstance service) async {
               PlayAudio("audios/1/ding.wav");
               count++;
             } else {
-              PerfectVolumeControl.setVolume(val);
+              count++;
+              if (count >= 10) {
+                PerfectVolumeControl.setVolume(val);
+                D.cancel();
+              }
             }
           }
         }
