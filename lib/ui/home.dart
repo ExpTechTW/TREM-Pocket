@@ -43,7 +43,8 @@ class _HomePage extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (start == 0) {
         start = 1;
-        var Data = await NetWork('{"Function": "data","Type": "earthquake"}');
+        var Data = await NetWork(
+            '{"Function": "data","Type": "earthquake","Value":"50"}');
         List data = Data["response"] as List;
         _children = <Widget>[];
         for (var i = 0; i < data.length; i++) {
