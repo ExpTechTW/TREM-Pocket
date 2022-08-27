@@ -8,6 +8,7 @@ import 'package:latlong2/latlong.dart';
 import '../core/network.dart';
 
 double TN = 0;
+int Start = 0;
 List<CircleMarker> CircleD = [];
 
 class EEWPage extends StatefulWidget {
@@ -25,9 +26,25 @@ class _EEWPage extends State<EEWPage> {
   }
 
   @override
+  void initState() {
+    Start = 0;
+    setState(() {});
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    Start = 1;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Timer.periodic(const Duration(milliseconds: 1000), (timer) async {
+      var timerT;
+      timerT =
+          Timer.periodic(const Duration(milliseconds: 1000), (timer) async {
+        if (Start == 1) timerT.cancel();
         var data =
             jsonDecode(await Get("https://exptech.com.tw/get?Function=EEW"));
         await TIME();

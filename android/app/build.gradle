@@ -28,7 +28,7 @@ android {
         applicationId "com.exptech.tw.trem"
         minSdkVersion 19
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 5
+        versionCode 6
         versionName "22w35-pre1"
     }
 
