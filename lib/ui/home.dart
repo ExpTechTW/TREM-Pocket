@@ -66,7 +66,7 @@ class _HomePage extends State<HomePage> {
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(15),
                           child: Text(
                             _Intensity(data[i]["data"][0]["areaIntensity"]),
                             style: const TextStyle(

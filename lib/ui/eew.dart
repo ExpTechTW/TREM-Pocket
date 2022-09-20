@@ -42,36 +42,38 @@ class _EEWPage extends State<EEWPage> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       var timerT;
-      timerT =
-          Timer.periodic(const Duration(milliseconds: 1000), (timer) async {
-        if (Start == 1) timerT.cancel();
-        var data =
-            jsonDecode(await Get("https://exptech.com.tw/get?Function=EEW"));
-        await TIME();
-        if (TN - data["TimeStamp"] < 240000) {
-          CircleD = [];
-          CircleD.add(
-            CircleMarker(
-                point: LatLng(double.parse(data["NorthLatitude"].toString()),
-                    double.parse(data["EastLongitude"].toString())),
-                color: Colors.blue.withOpacity(0),
-                borderStrokeWidth: 1,
-                radius: ((TN - data["Time"]) / 1000) * 6.5),
-          );
-          CircleD.add(
-            CircleMarker(
-                point: LatLng(double.parse(data["NorthLatitude"].toString()),
-                    double.parse(data["EastLongitude"].toString())),
-                color: Colors.red.withOpacity(0.1),
-                borderStrokeWidth: 1,
-                radius: ((TN - data["Time"]) / 1000) * 3.5),
-          );
-          setState(() {});
-        } else if (CircleD.isNotEmpty) {
-          CircleD = [];
-          setState(() {});
-        }
-      });
+      timerT ??= Timer.periodic(const Duration(milliseconds: 1000), (timer) async {
+              print(1);
+              if (Start == 1) timerT.cancel();
+              var data =
+              jsonDecode(await Get("https://exptech.com.tw/get?Function=EEWT"));
+              await TIME();
+              if (TN - data["TimeStamp"] < 240000) {
+                CircleD = [];
+                CircleD.add(
+                  CircleMarker(
+                      point: LatLng(
+                          double.parse(data["NorthLatitude"].toString()),
+                          double.parse(data["EastLongitude"].toString())),
+                      color: Colors.blue.withOpacity(0),
+                      borderStrokeWidth: 1,
+                      radius: ((TN - data["Time"]) / 1000) * 6.5),
+                );
+                CircleD.add(
+                  CircleMarker(
+                      point: LatLng(
+                          double.parse(data["NorthLatitude"].toString()),
+                          double.parse(data["EastLongitude"].toString())),
+                      color: Colors.red.withOpacity(0.1),
+                      borderStrokeWidth: 1,
+                      radius: ((TN - data["Time"]) / 1000) * 3.5),
+                );
+                setState(() {});
+              } else if (CircleD.isNotEmpty) {
+                CircleD = [];
+                setState(() {});
+              }
+            });
     });
     return FlutterMap(
       options: MapOptions(
