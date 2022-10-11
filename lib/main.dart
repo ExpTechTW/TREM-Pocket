@@ -14,7 +14,7 @@ import 'package:trem/ui/initialization.dart';
 import 'core/foreground.dart';
 
 Future<void> _BackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  await initializeService();
   FlutterBackgroundService().invoke("data", message.data);
 }
 
