@@ -113,6 +113,7 @@ class _SetPage extends State<SetPage> {
       if (config.get('wave')) {
         _wave = true;
       }
+      if(config.get("city")==null) config.put("city","臺南市");
       if (city == "") {
         city = config.get("city") ?? "臺南市";
         town = config.get("town") ?? "歸仁區";

@@ -28,8 +28,8 @@ android {
         applicationId "com.exptech.tw.trem"
         minSdkVersion 19
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 6
-        versionName "22w35-pre1"
+        versionCode 7
+        versionName "22w42-pre1"
     }
 
     def keystoreProperties = new Properties()

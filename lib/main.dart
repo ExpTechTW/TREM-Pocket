@@ -50,8 +50,8 @@ Future<void> main() async {
   await Hive.initFlutter();
   await Hive.openBox('config');
   var config = Hive.box('config');
-  if (config.get('init') == null) {
-    config.put('init', true);
+  if (config.get('init_v1') == null) {
+    config.put('init_v1', true);
     config.put('CWB_EEW', true);
     config.put('SCDZJ_EEW', true);
     config.put('JMA_EEW', true);
