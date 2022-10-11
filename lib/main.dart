@@ -53,7 +53,7 @@ Future<void> main() async {
   if (config.get('init') == null) {
     config.put('init', true);
     config.put('CWB_EEW', true);
-    config.put('ICL_EEW', true);
+    config.put('SCDZJ_EEW', true);
     config.put('JMA_EEW', true);
     config.put('Palert', true);
     config.put('Report', true);
@@ -66,7 +66,7 @@ Future<void> main() async {
     config.put('wave', true);
     config.put('intensity', "0級");
     await FirebaseMessaging.instance.subscribeToTopic("CWB_EEW");
-    await FirebaseMessaging.instance.subscribeToTopic("ICL_EEW");
+    await FirebaseMessaging.instance.subscribeToTopic("SCDZJ_EEW");
     await FirebaseMessaging.instance.subscribeToTopic("JMA_EEW");
     await FirebaseMessaging.instance.subscribeToTopic("Palert");
     await FirebaseMessaging.instance.subscribeToTopic("Report");

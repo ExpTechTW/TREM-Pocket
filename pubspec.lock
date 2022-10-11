@@ -154,7 +154,7 @@ packages:
       name: device_info_plus_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0"
+    version: "4.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -182,7 +182,7 @@ packages:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.21.1"
+    version: "1.22.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -210,14 +210,14 @@ packages:
       name: firebase_messaging_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.3"
+    version: "4.1.4"
   firebase_messaging_web:
     dependency: transitive
     description:
       name: firebase_messaging_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.3"
+    version: "3.1.4"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -229,28 +229,28 @@ packages:
       name: flutter_background_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.3"
+    version: "2.3.8"
   flutter_background_service_android:
     dependency: transitive
     description:
       name: flutter_background_service_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.3"
+    version: "2.4.0"
   flutter_background_service_ios:
     dependency: transitive
     description:
       name: flutter_background_service_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.4"
   flutter_background_service_platform_interface:
     dependency: transitive
     description:
       name: flutter_background_service_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.4"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -295,14 +295,14 @@ packages:
       name: geolocator_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "4.1.2"
   geolocator_apple:
     dependency: transitive
     description:
       name: geolocator_apple
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.1"
+    version: "2.2.2"
   geolocator_platform_interface:
     dependency: transitive
     description:
@@ -442,7 +442,7 @@ packages:
       name: path_provider_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.19"
+    version: "2.0.20"
   path_provider_ios:
     dependency: transitive
     description:
@@ -477,7 +477,7 @@ packages:
       name: path_provider_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.3"
   perfect_volume_control:
     dependency: "direct main"
     description:
@@ -498,7 +498,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.3"
   polylabel:
     dependency: transitive
     description:
@@ -636,7 +636,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.7.0"
+    version: "3.0.0"
   wkt_parser:
     dependency: transitive
     description:
@@ -650,7 +650,7 @@ packages:
       name: xdg_directories
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0+1"
+    version: "0.2.0+2"
 sdks:
   dart: ">=2.17.0 <3.0.0"
   flutter: ">=3.0.0"

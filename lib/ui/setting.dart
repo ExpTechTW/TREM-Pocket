@@ -27,7 +27,7 @@ class _SetPage extends State<SetPage> {
   bool _NIED = false;
   bool _Palert = false;
   bool _Report = false;
-  bool _ICL = false;
+  bool _SCDZJ = false;
   bool _Tsunami = false;
   bool _setVolume = false;
   bool _site = false;
@@ -83,8 +83,8 @@ class _SetPage extends State<SetPage> {
       if (config.get('JMA_EEW')) {
         _JMA = true;
       }
-      if (config.get('ICL_EEW')) {
-        _ICL = true;
+      if (config.get('SCDZJ_EEW')) {
+        _SCDZJ = true;
       }
       if (config.get('KMA_EEW')) {
         _KMA = true;
@@ -147,6 +147,9 @@ class _SetPage extends State<SetPage> {
       config.put("lat", Data[city][town][1]);
       config.put("long", Data[city][town][2]);
       config.put("site", Data[city][town][3]);
+      if (!mounted) {
+        return;
+      }
       setState(() {});
     });
     return Scaffold(
@@ -357,7 +360,7 @@ class _SetPage extends State<SetPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "成都高新減災研究所 ICL",
+                "四川省地震局 SCDZJ",
                 style: TextStyle(
                   fontSize: 25,
                 ),
@@ -367,9 +370,9 @@ class _SetPage extends State<SetPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   CupertinoSwitch(
-                      value: _ICL,
+                      value: _SCDZJ,
                       onChanged: (bool value) =>
-                          {_ICL = value, _Switch(value, "ICL_EEW")})
+                          {_SCDZJ = value, _Switch(value, "SCDZJ_EEW")})
                 ],
               ))
             ],

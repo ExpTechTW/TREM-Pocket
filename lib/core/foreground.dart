@@ -131,7 +131,7 @@ void onStart(ServiceInstance service) async {
         PlayAudio("audios/1/intensity.wav");
       }
       if (int.parse(s.toString().replaceAll("-", "").replaceAll("+", "")) >=
-          4) {
+          5) {
         for (var i = 0; i < 5; i++) {
           PlayAudio("audios/Alert.wav");
         }

@@ -104,6 +104,9 @@ class _HomePage extends State<HomePage> {
               ),
             ),
           );
+          if (!mounted) {
+            return;
+          }
           setState(() {});
         }
       }

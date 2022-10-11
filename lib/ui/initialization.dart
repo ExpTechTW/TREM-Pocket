@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:trem/ui/eew.dart';
 import 'package:trem/ui/home.dart';
 import 'package:trem/ui/setting.dart';
 import 'package:uuid/uuid.dart';
@@ -14,7 +13,7 @@ class InitializationPage extends StatefulWidget {
 
 class _InitializationPage extends State<InitializationPage> {
   int _currentIndex = 0;
-  final pages = [const EEWPage(), const HomePage(), const SetPage()];
+  final pages = [const HomePage(), const SetPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +31,8 @@ class _InitializationPage extends State<InitializationPage> {
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '首頁'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.computer_outlined), label: '報告'),
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.computer_outlined), label: '報告'),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle), label: '設定'),
         ],
