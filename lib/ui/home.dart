@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:trem/core/network.dart';
 
@@ -43,9 +45,8 @@ class _HomePage extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (start == 0) {
         start = 1;
-        var Data = await NetWork(
-            '{"Function": "data","Type": "earthquake","Value":"50"}');
-        List data = Data["response"] as List;
+        var Data = jsonDecode(await Get("https://exptech.com.tw/api/v1/earthquake/reports?limit=50"));
+        List data = Data as List;
         _children = <Widget>[];
         for (var i = 0; i < data.length; i++) {
           var loc = data[i]["location"]
