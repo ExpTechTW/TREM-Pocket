@@ -2,7 +2,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:select_dialog/select_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../core/api.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -223,6 +226,71 @@ class _SettingPage extends State<SettingPage> {
                               ),
                             ],
                           ),
+                          const SizedBox(height: 5),
+                          GestureDetector(
+                            onTap: () async {
+                              var loc = await parseJsonFromAssets(
+                                  "assets/resource/location.json");
+                              List<String> loc_list = [];
+                              List<String> city_key = loc.keys.toList();
+                              for (var i = 0; i < city_key.length; i++) {
+                                List<String> town_key =
+                                    loc[city_key[i]].keys.toList();
+                                for (var I = 0; I < town_key.length; I++) {
+                                  loc_list.add("${city_key[i]} ${town_key[I]}");
+                                }
+                              }
+                              SelectDialog.showModal<String>(
+                                context,
+                                label: "選擇所在地",
+                                selectedValue:
+                                    prefs?.getString("location") ?? "臺南市 歸仁區",
+                                items: loc_list,
+                                onChange: (String selected) async {
+                                  await prefs.setString("location", selected);
+                                },
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "所在地",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 25),
+                                      ),
+                                      Row(
+                                        children: const [
+                                          Text(
+                                            "計算所在地 預估震度",
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 20),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    const Icon(Icons.my_location,
+                                        color: Colors.white),
+                                    Text(
+                                      prefs?.getString("location") ?? "臺南市 歸仁區",
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),

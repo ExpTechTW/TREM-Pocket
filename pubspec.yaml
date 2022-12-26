@@ -30,6 +30,7 @@ dependencies:
   alarmplayer: ^1.0.5
   auto_start_flutter: ^0.1.1
   android_autostart: ^0.0.3
+  select_dialog: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -41,3 +42,4 @@ flutter:
   assets:
     - assets/images/
     - assets/audios/
+    - assets/resource/

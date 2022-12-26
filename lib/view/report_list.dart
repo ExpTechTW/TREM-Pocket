@@ -37,6 +37,7 @@ Map<String, dynamic> info(dynamic data) {
   if (_i == "6") _i = "5+";
   if (_i == "7") _i = "6-";
   if (_i == "8") _i = "6+";
+  if (_i == "9") _i = "7";
   return {
     "color": _color,
     "loc": data["location"]
