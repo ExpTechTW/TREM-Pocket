@@ -1,11 +1,11 @@
 {
-  "name": "trem",
-  "short_name": "trem",
+  "name": "trem_pocket",
+  "short_name": "trem_pocket",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0175C2",
   "theme_color": "#0175C2",
-  "description": "trem",
+  "description": "A new Flutter project.",
   "orientation": "portrait-primary",
   "prefer_related_applications": false,
   "icons": [
