@@ -13,8 +13,6 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.5
   http: ^0.13.5
-  flutter_map: ^3.1.0
-  latlong2: ^0.8.1
   firebase_core: ^2.4.0
   firebase_messaging: ^14.2.0
   clipboard: ^0.1.3

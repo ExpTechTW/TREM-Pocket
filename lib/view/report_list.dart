@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trem_pocket/core/api.dart';
 import 'package:trem_pocket/core/http_get.dart';
+import 'package:trem_pocket/view/report.dart';
 
 int start = 0;
 List<int> color = [
@@ -30,14 +32,9 @@ Map<String, dynamic> info(dynamic data) {
     _color = color[0];
   } else {
     int _intensity = data["data"][0]["areaIntensity"];
-    _i = _intensity.toString();
+    _i = int_to_intensity(_intensity);
     _color = color[_intensity - 1];
   }
-  if (_i == "5") _i = "5-";
-  if (_i == "6") _i = "5+";
-  if (_i == "7") _i = "6-";
-  if (_i == "8") _i = "6+";
-  if (_i == "9") _i = "7";
   return {
     "color": _color,
     "loc": data["location"]
@@ -70,9 +67,26 @@ class _ReportListPage extends State<ReportListPage> {
       _children = <Widget>[];
       for (var i = 0; i < data.length; i++) {
         var _info = info(data[i]);
+        data[i]["info"] = _info;
         _children.add(
           GestureDetector(
-            onTap: () {},
+            onTap: () async {
+              if (_info["intensity"] != "?") {
+                if (data[i]["earthquakeNo"] % 1000 != 0) {
+                  var ans = await get(
+                      "https://exptech.com.tw/api/v1/earthquake/reports/${data[i]["earthquakeNo"]}");
+                  if (ans != false) data[i]["report"] = ans;
+                }
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ReportPage(),
+                      settings: RouteSettings(
+                        arguments: data[i],
+                      ),
+                    ));
+              }
+            },
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 3, 12, 3),
               child: Container(
@@ -92,7 +106,7 @@ class _ReportListPage extends State<ReportListPage> {
                           child: Text(
                             _info["intensity"],
                             style: const TextStyle(
-                                fontSize: 40, color: Colors.white),
+                                fontSize: 45, color: Colors.white),
                           ),
                         ),
                         Expanded(
@@ -100,9 +114,9 @@ class _ReportListPage extends State<ReportListPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _info["loc"],
+                              "${(data[i]["earthquakeNo"] % 1000 != 0) ? "✩ " : ""}${_info["loc"]}",
                               style: const TextStyle(
-                                  fontSize: 25, color: Colors.white),
+                                  fontSize: 22, color: Colors.white),
                             ),
                             Text(
                               data[i]["originTime"],
@@ -116,7 +130,7 @@ class _ReportListPage extends State<ReportListPage> {
                           child: Text(
                             "M ${_info["magnitude"]}",
                             style: const TextStyle(
-                                fontSize: 35, color: Colors.white),
+                                fontSize: 30, color: Colors.white),
                           ),
                         ),
                       ],

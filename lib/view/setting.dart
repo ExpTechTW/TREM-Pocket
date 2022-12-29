@@ -59,7 +59,7 @@ class _SettingPage extends State<SettingPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "接收參數",
+                            "接收",
                             style: TextStyle(color: Colors.white, fontSize: 30),
                           ),
                           const Divider(
@@ -69,43 +69,69 @@ class _SettingPage extends State<SettingPage> {
                             endIndent: 5,
                             color: Colors.grey,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "中央氣象局",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 25),
-                              ),
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    child: Text(
-                                      "接收 中央氣象局(CWB) 強震即時警報",
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 20),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                          GestureDetector(
+                            onTap: () async {
+                              var loc = await parseJsonFromAssets(
+                                  "assets/resource/location.json");
+                              List<String> loc_list = [];
+                              List<String> city_key = loc.keys.toList();
+                              for (var i = 0; i < city_key.length; i++) {
+                                List<String> town_key =
+                                    loc[city_key[i]].keys.toList();
+                                for (var I = 0; I < town_key.length; I++) {
+                                  loc_list.add("${city_key[i]} ${town_key[I]}");
+                                }
+                              }
+                              SelectDialog.showModal<String>(
+                                context,
+                                label: "選擇所在地",
+                                selectedValue:
+                                    prefs?.getString("location") ?? "臺南市 歸仁區",
+                                items: loc_list,
+                                onChange: (String selected) async {
+                                  await prefs.setString("location", selected);
+                                },
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      FlutterSwitch(
-                                        width: 50,
-                                        height: 30,
-                                        toggleSize: 20,
-                                        value: prefs?.getBool('accept_eew') ??
-                                            false,
-                                        borderRadius: 30,
-                                        onToggle: (bool value) async {
-                                          await prefs.setBool(
-                                              'accept_eew', value);
-                                        },
+                                      const Text(
+                                        "所在地",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 25),
+                                      ),
+                                      Row(
+                                        children: const [
+                                          Text(
+                                            "計算所在地 預估震度",
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 20),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    const Icon(Icons.my_location,
+                                        color: Colors.white),
+                                    Text(
+                                      prefs?.getString("location") ?? "臺南市 歸仁區",
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 5),
                           Column(
@@ -152,7 +178,7 @@ class _SettingPage extends State<SettingPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "地震報告",
+                                "TREM 人工定位",
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 25),
                               ),
@@ -160,7 +186,7 @@ class _SettingPage extends State<SettingPage> {
                                 children: [
                                   const Expanded(
                                     child: Text(
-                                      "接收 中央氣象局(CWB) 地震報告",
+                                      "接收 TREM 人工定位 地震資訊",
                                       style: TextStyle(
                                           color: Colors.grey, fontSize: 20),
                                     ),
@@ -226,71 +252,159 @@ class _SettingPage extends State<SettingPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 5),
-                          GestureDetector(
-                            onTap: () async {
-                              var loc = await parseJsonFromAssets(
-                                  "assets/resource/location.json");
-                              List<String> loc_list = [];
-                              List<String> city_key = loc.keys.toList();
-                              for (var i = 0; i < city_key.length; i++) {
-                                List<String> town_key =
-                                    loc[city_key[i]].keys.toList();
-                                for (var I = 0; I < town_key.length; I++) {
-                                  loc_list.add("${city_key[i]} ${town_key[I]}");
-                                }
-                              }
-                              SelectDialog.showModal<String>(
-                                context,
-                                label: "選擇所在地",
-                                selectedValue:
-                                    prefs?.getString("location") ?? "臺南市 歸仁區",
-                                items: loc_list,
-                                onChange: (String selected) async {
-                                  await prefs.setString("location", selected);
-                                },
-                              );
-                            },
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Material(
+              color: Colors.black,
+              child: Ink(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  border: Border.all(width: 3, color: Colors.orangeAccent),
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Container(
+                    alignment: const Alignment(0, 0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "音效",
+                            style: TextStyle(color: Colors.white, fontSize: 30),
+                          ),
+                          const Divider(
+                            height: 10,
+                            thickness: 3,
+                            indent: 5,
+                            endIndent: 5,
+                            color: Colors.grey,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "強震即時警報",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 25),
+                              ),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    child: Text(
+                                      "氣象局發布 強震即時警報 時播放",
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 20),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      const Text(
-                                        "所在地",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 25),
-                                      ),
-                                      Row(
-                                        children: const [
-                                          Text(
-                                            "計算所在地 預估震度",
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 20),
-                                          ),
-                                        ],
+                                      FlutterSwitch(
+                                        width: 50,
+                                        height: 30,
+                                        toggleSize: 20,
+                                        value: prefs?.getBool('audio_eew') ??
+                                            false,
+                                        borderRadius: 30,
+                                        onToggle: (bool value) async {
+                                          await prefs.setBool(
+                                              'audio_eew', value);
+                                        },
                                       ),
                                     ],
                                   ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    const Icon(Icons.my_location,
-                                        color: Colors.white),
-                                    Text(
-                                      prefs?.getString("location") ?? "臺南市 歸仁區",
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 20),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "預估震度警報",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 25),
+                              ),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    child: Text(
+                                      "所在地 預估震度 4級 以上時播放",
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 20),
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      FlutterSwitch(
+                                        width: 50,
+                                        height: 30,
+                                        toggleSize: 20,
+                                        value:
+                                            prefs?.getBool('audio_intensity') ??
+                                                false,
+                                        borderRadius: 30,
+                                        onToggle: (bool value) async {
+                                          await prefs.setBool(
+                                              'audio_intensity', value);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "TREM 地震檢知",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 25),
+                              ),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    child: Text(
+                                      "TREM 檢測到地震 時播放",
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 20),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      FlutterSwitch(
+                                        width: 50,
+                                        height: 30,
+                                        toggleSize: 20,
+                                        value: prefs?.getBool('audio_trem') ??
+                                            false,
+                                        borderRadius: 30,
+                                        onToggle: (bool value) async {
+                                          await prefs.setBool(
+                                              'audio_trem', value);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

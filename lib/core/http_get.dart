@@ -8,9 +8,9 @@ Future<dynamic> get(String uri) async {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return {};
+      return false;
     }
   } catch (err) {
-    return {};
+    return false;
   }
 }
