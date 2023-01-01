@@ -59,37 +59,44 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      clock ??= Timer.periodic(const Duration(seconds: 1), (timer) async {
-        if (update) return;
-        update = true;
-        await _updateImgWidget();
-        update = false;
-        var ans = await get("https://exptech.com.tw/api/v1/trem/status");
-        if (ans != false) {
-          data = ans;
-          if (data["eew"] != "" && data["eew"] != eew["ID"] + eew["Version"]) {
-            EEW = true;
-            eew = eew_data;
-            if (eew["TimeStamp"] == null) {
-              var eewAns = await get(
-                  "https://exptech.com.tw/api/v1/earthquake/eew?type=earthquake");
-              if (eewAns != false) eew = eewAns;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (clock == null) {
+        await Future.delayed(Duration(
+            milliseconds: 1000 -
+                DateTime.fromMillisecondsSinceEpoch(await Now(true))
+                    .millisecondsSinceEpoch));
+        clock = Timer.periodic(const Duration(seconds: 1), (timer) async {
+          if (update) return;
+          update = true;
+          await _updateImgWidget();
+          update = false;
+          var ans = await get("https://exptech.com.tw/api/v1/trem/status");
+          if (ans != false) {
+            data = ans;
+            if (data["eew"] != "" &&
+                data["eew"] != eew["ID"] + eew["Version"]) {
+              EEW = true;
+              eew = eew_data;
+              if (eew["TimeStamp"] == null) {
+                var eewAns = await get(
+                    "https://exptech.com.tw/api/v1/earthquake/eew?type=earthquake");
+                if (eewAns != false) eew = eewAns;
+              }
+              if (eew["TimeStamp"] != null) {
+                eew_info = await Earthquake(eew);
+              }
+            } else {
+              EEW = false;
             }
-            if (eew["TimeStamp"] != null) {
-              eew_info = await Earthquake(eew);
-            }
-          } else {
-            EEW = false;
           }
-        }
-        now = DateTime.fromMillisecondsSinceEpoch(await Now(false))
-            .toString()
-            .substring(0, 19)
-            .replaceAll("-", "/");
-        if (!mounted) return;
-        setState(() {});
-      });
+          now = DateTime.fromMillisecondsSinceEpoch(await Now(false))
+              .toString()
+              .substring(0, 19)
+              .replaceAll("-", "/");
+          if (!mounted) return;
+          setState(() {});
+        });
+      }
     });
     return Scaffold(
       backgroundColor: Colors.black,
