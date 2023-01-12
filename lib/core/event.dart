@@ -30,15 +30,17 @@ void OnData(Map _data, String Sender) async {
   data["Now"] = DateTime.fromMillisecondsSinceEpoch(data["now"])
       .toString()
       .substring(11, 16);
-  data["delay"] =
-      ((await Now(false) - data["TimeStamp"]) / 1000).toStringAsFixed(1);
+  data["delay"] = double.parse(
+      ((await Now(false) - data["TimeStamp"]) / 1000).toStringAsFixed(1));
   if (data["Function"] == "TREM") {
     if (prefs.getBool('accept_trem') ?? false) {
       if (prefs.getBool('audio_trem') ?? false) {
-        alarmplayer.Alarm(
-          url: "assets/audios/note.mp3",
-          volume: 1,
-        );
+        if (data["delay"] < 240) {
+          alarmplayer.Alarm(
+            url: "assets/audios/note.mp3",
+            volume: 1,
+          );
+        }
       }
       await flutterLocalNotificationsPlugin.show(2, '地震檢知 | ${data["UTC+8"]}',
           "${data["Location"]}", notificationDetails,
@@ -48,18 +50,21 @@ void OnData(Map _data, String Sender) async {
     eew_data = data;
     if (prefs.getBool('accept_eew') ?? false) {
       var ans = await Earthquake(data);
-      print(ans);
       if (prefs.getBool('audio_eew') ?? false) {
-        alarmplayer.Alarm(
-          url: "assets/audios/warn.mp3",
-          volume: 1,
-        );
+        if (data["delay"] < 240) {
+          alarmplayer.Alarm(
+            url: "assets/audios/warn.mp3",
+            volume: 1,
+          );
+        }
       }
       if ((prefs.getBool('audio_intensity') ?? false) && ans[0] >= 4) {
-        alarmplayer.Alarm(
-          url: "assets/audios/alert.mp3",
-          volume: 1,
-        );
+        if (data["delay"] < 240) {
+          alarmplayer.Alarm(
+            url: "assets/audios/alert.mp3",
+            volume: 1,
+          );
+        }
       }
       int num = (ans[2] as double).truncate();
       String Num = (num <= 0) ? "抵達 (預警盲區)" : "$num秒 後抵達";
