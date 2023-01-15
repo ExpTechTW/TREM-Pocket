@@ -37,7 +37,7 @@ void main() async {
   const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid, iOS: null, macOS: null);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  FirebaseMessaging.instance.subscribeToTopic("App");
+  FirebaseMessaging.instance.subscribeToTopic("ExpTech_v1");
   runApp(const MyApp());
 }
 

@@ -63,24 +63,24 @@ Future<List> Earthquake(json) async {
   String town = Loc[1];
   double point = sqrt(pow(
           (loc[city][town][1] +
-                      double.parse(json["NorthLatitude"].toString()) * -1)
+                      double.parse(json["lat"].toString()) * -1)
                   .abs() *
               111,
           2) +
       pow(
           (loc[city][town][2] +
-                      double.parse(json["EastLongitude"].toString()) * -1)
+                      double.parse(json["lon"].toString()) * -1)
                   .abs() *
               101,
           2));
   double distance =
-      sqrt(pow(int.parse(json["Depth"].toString()), 2) + pow(point, 2));
+      sqrt(pow(int.parse(json["depth"].toString()), 2) + pow(point, 2));
   var ans = PGAcount(
-      double.parse(json["Scale"].toString()), distance, loc[city][town][3]);
+      double.parse(json["scale"].toString()), distance, loc[city][town][3]);
   double num_s =
-      (distance - ((await Now(false) - json["Time"]) / 1000) * 3.5) / 3.5;
+      (distance - ((await Now(false) - json["time"]) / 1000) * 3.5) / 3.5;
   double num_p =
-      (distance - ((await Now(false) - json["Time"]) / 1000) * 6.5) / 6.5;
+      (distance - ((await Now(false) - json["time"]) / 1000) * 6.5) / 6.5;
   return [ans[0], distance, num_s, num_p];
 }
 

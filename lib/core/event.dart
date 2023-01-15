@@ -21,8 +21,8 @@ void OnData(Map _data, String Sender) async {
           ticker: 'ticker');
   const NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);
-  if (data["Time"] != null) {
-    data["UTC+8"] = DateTime.fromMillisecondsSinceEpoch(data["Time"])
+  if (data["time"] != null) {
+    data["UTC+8"] = DateTime.fromMillisecondsSinceEpoch(data["time"])
         .toString()
         .substring(5, 16);
   }
@@ -31,8 +31,8 @@ void OnData(Map _data, String Sender) async {
       .toString()
       .substring(11, 16);
   data["delay"] = double.parse(
-      ((await Now(false) - data["TimeStamp"]) / 1000).toStringAsFixed(1));
-  if (data["Function"] == "TREM") {
+      ((await Now(false) - data["timestamp"]) / 1000).toStringAsFixed(1));
+  if (data["type"] == "trem-eew") {
     if (prefs.getBool('accept_trem') ?? false) {
       if (prefs.getBool('audio_trem') ?? false) {
         if (data["delay"] < 240) {
@@ -43,10 +43,10 @@ void OnData(Map _data, String Sender) async {
         }
       }
       await flutterLocalNotificationsPlugin.show(2, '地震檢知 | ${data["UTC+8"]}',
-          "${data["Location"]}", notificationDetails,
+          "${data["location"]}", notificationDetails,
           payload: '');
     }
-  } else if (data["Function"] == "earthquake") {
+  } else if (data["type"] == "eew-cwb") {
     eew_data = data;
     if (prefs.getBool('accept_eew') ?? false) {
       var ans = await Earthquake(data);
@@ -78,21 +78,21 @@ void OnData(Map _data, String Sender) async {
           "$intensity 地震 $Num", notificationDetails,
           payload: '');
     }
-  } else if (data["Function"] == "report") {
-    if (data["Location"].toString().contains("TREM") &&
+  } else if (data["type"] == "report") {
+    if (data["location"].toString().contains("TREM") &&
         !(prefs.getBool('accept_report') ?? false)) return;
-    String loc = data["Location"]
+    String loc = data["location"]
         .toString()
-        .substring(data["Location"].toString().indexOf("(") + 1,
-            data["Location"].toString().indexOf(")"))
+        .substring(data["location"].toString().indexOf("(") + 1,
+            data["location"].toString().indexOf(")"))
         .replaceAll("位於", "");
     await flutterLocalNotificationsPlugin.show(5, '地震報告 | ${data["UTC+8"]}',
-        "$loc 發生規模 ${data["Scale"]} 地震", notificationDetails,
+        "$loc 發生規模 ${data["scale"]} 地震", notificationDetails,
         payload: '');
-  } else if (data["Function"] == "palert") {
+  } else if (data["type"] == "palert-app") {
     if (prefs.getBool('accept_palert') ?? false) {
       await flutterLocalNotificationsPlugin.show(4, '近即時震度 | ${data["UTC+8"]}',
-          "最大震度 ${data["Location"]} ${data["Intensity"]}級", notificationDetails,
+          "最大震度 ${data["location"]} ${data["intensity"]}級", notificationDetails,
           payload: '');
     }
   }
