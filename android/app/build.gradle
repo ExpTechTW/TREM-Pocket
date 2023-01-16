@@ -37,8 +37,8 @@ android {
         applicationId "com.exptech.trem_pocket"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 4
-        versionName "1.1.0.0"
+        versionCode 6
+        versionName "1.1.1.0"
     }
 
     signingConfigs {

@@ -21,10 +21,11 @@ void OnData(Map _data, String Sender) async {
           ticker: 'ticker');
   const NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);
-  if (data["time"] != null) {
-    data["UTC+8"] = DateTime.fromMillisecondsSinceEpoch(data["time"])
-        .toString()
-        .substring(5, 16);
+  if (data["time"] != null || data["timestamp"] != null) {
+    data["UTC+8"] =
+        DateTime.fromMillisecondsSinceEpoch(data["time"] ?? data["timestamp"])
+            .toString()
+            .substring(5, 16);
   }
   data["now"] = await Now(false);
   data["Now"] = DateTime.fromMillisecondsSinceEpoch(data["now"])
@@ -42,8 +43,11 @@ void OnData(Map _data, String Sender) async {
           );
         }
       }
-      await flutterLocalNotificationsPlugin.show(2, '地震檢知 | ${data["UTC+8"]}',
-          "${data["location"]}", notificationDetails,
+      await flutterLocalNotificationsPlugin.show(
+          2,
+          '地震檢知 第${data["number"]}報 | ${data["UTC+8"]}',
+          "${data["location"]}",
+          notificationDetails,
           payload: '');
     }
   } else if (data["type"] == "eew-cwb") {
@@ -74,8 +78,11 @@ void OnData(Map _data, String Sender) async {
               .toString()
               .replaceAll("+", "強")
               .replaceAll("-", "弱");
-      await flutterLocalNotificationsPlugin.show(3, '強震即時警報 | ${data["UTC+8"]}',
-          "$intensity 地震 $Num", notificationDetails,
+      await flutterLocalNotificationsPlugin.show(
+          3,
+          '強震即時警報 第${data["number"]}報 | ${data["UTC+8"]}',
+          "$intensity 地震 $Num",
+          notificationDetails,
           payload: '');
     }
   } else if (data["type"] == "report") {
