@@ -25,8 +25,8 @@ class _ReportPage extends State<ReportPage> {
       if (finish) return;
       finish = true;
       if (data["report"] != null) {
-        for (var i = 0; i < data["report"]["Intensity"].length; i++) {
-          var _station = data["report"]["Intensity"][i];
+        for (var i = 0; i < data["report"]["intensity"].length; i++) {
+          var _station = data["report"]["intensity"][i];
           for (var I = 0; I < _station["station"].length; I++) {
             var __station = _station["station"][I];
             if (__station == null) continue;
@@ -258,7 +258,7 @@ class _ReportPage extends State<ReportPage> {
                           padding: const EdgeInsets.all(10),
                           child: Image.network((data["report"] == null)
                               ? ""
-                              : data["report"]["ShakeImage"]),
+                              : data["report"]["link"]["shake_image"]),
                         ),
                       ),
                     ),
