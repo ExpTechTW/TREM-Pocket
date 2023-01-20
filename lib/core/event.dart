@@ -9,6 +9,8 @@ import 'global.dart';
 import 'ntp.dart';
 
 Alarmplayer alarmplayer = Alarmplayer();
+int trem_id = 0;
+int eew_id = 0;
 
 void OnData(Map _data, String Sender) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -35,12 +37,15 @@ void OnData(Map _data, String Sender) async {
       ((await Now(false) - data["timestamp"]) / 1000).toStringAsFixed(1));
   if (data["type"] == "trem-eew") {
     if (prefs.getBool('accept_trem') ?? false) {
-      if (prefs.getBool('audio_trem') ?? false) {
-        if (data["delay"] < 240) {
-          alarmplayer.Alarm(
-            url: "assets/audios/note.mp3",
-            volume: 1,
-          );
+      if (data["id"] != trem_id) {
+        trem_id = data["id"];
+        if (prefs.getBool('audio_trem') ?? false) {
+          if (data["delay"] < 240) {
+            alarmplayer.Alarm(
+              url: "assets/audios/note.mp3",
+              volume: 1,
+            );
+          }
         }
       }
       await flutterLocalNotificationsPlugin.show(
@@ -54,20 +59,23 @@ void OnData(Map _data, String Sender) async {
     eew_data = data;
     if (prefs.getBool('accept_eew') ?? false) {
       var ans = await Earthquake(data);
-      if (prefs.getBool('audio_eew') ?? false) {
-        if (data["delay"] < 240) {
-          alarmplayer.Alarm(
-            url: "assets/audios/warn.mp3",
-            volume: 1,
-          );
+      if (data["id"] != eew_id) {
+        eew_id = data["id"];
+        if (prefs.getBool('audio_eew') ?? false) {
+          if (data["delay"] < 240) {
+            alarmplayer.Alarm(
+              url: "assets/audios/warn.mp3",
+              volume: 1,
+            );
+          }
         }
-      }
-      if ((prefs.getBool('audio_intensity') ?? false) && ans[0] >= 4) {
-        if (data["delay"] < 240) {
-          alarmplayer.Alarm(
-            url: "assets/audios/alert.mp3",
-            volume: 1,
-          );
+        if ((prefs.getBool('audio_intensity') ?? false) && ans[0] >= 4) {
+          if (data["delay"] < 240) {
+            alarmplayer.Alarm(
+              url: "assets/audios/alert.mp3",
+              volume: 1,
+            );
+          }
         }
       }
       int num = (ans[2] as double).truncate();
