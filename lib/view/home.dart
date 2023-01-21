@@ -79,7 +79,7 @@ class _HomePage extends State<HomePage> {
               eew = eew_data;
               if (eew["TimeStamp"] == null) {
                 var eewAns = await get(
-                    "https://exptech.com.tw/api/v1/earthquake/eew?type=earthquake");
+                    "https://exptech.com.tw/api/v1/earthquake/eew?type=eew-cwb");
                 if (eewAns != false) eew = eewAns;
               }
               if (eew["TimeStamp"] != null) {

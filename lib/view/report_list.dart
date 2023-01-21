@@ -28,7 +28,7 @@ Map<String, dynamic> info(dynamic data) {
   String _i;
   int _color = 0;
   if (data["data"].length == 0) {
-    _i = "?";
+    _i = "--";
     _color = color[0];
   } else {
     int _intensity = data["data"][0]["areaIntensity"];
