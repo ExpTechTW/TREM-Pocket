@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trem_pocket/core/event.dart';
 import 'package:trem_pocket/view/init.dart';
 
@@ -38,6 +39,8 @@ void main() async {
       android: initializationSettingsAndroid, iOS: null, macOS: null);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   FirebaseMessaging.instance.subscribeToTopic("ExpTech_v1");
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setInt("replay", 0);
   runApp(const MyApp());
 }
 

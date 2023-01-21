@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as HTTP;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trem_pocket/core/global.dart';
 import 'package:trem_pocket/core/http_get.dart';
 
@@ -11,6 +12,9 @@ import '../core/api.dart';
 import '../core/ntp.dart';
 
 var clock;
+var time_clock;
+int replay = 0;
+var prefs;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -50,7 +54,9 @@ class _HomePage extends State<HomePage> {
 
   _updateImgWidget() async {
     try {
-      Uint8List bytes = await HTTP.readBytes(Uri.parse(url));
+      if (replay != 0) replay += 1000;
+      Uint8List bytes = await HTTP
+          .readBytes(Uri.parse(url + ((replay != 0) ? "?time=$replay" : "")));
       _pic = Image.memory(bytes, gaplessPlayback: true);
     } catch (e) {
       return;
@@ -60,7 +66,18 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      prefs = await SharedPreferences.getInstance();
+      if (replay == 0) replay = prefs.getInt("replay") ?? 0;
       if (clock == null) {
+        time_clock =
+            Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+          now = DateTime.fromMillisecondsSinceEpoch(await Now(false))
+              .toString()
+              .substring(0, 19)
+              .replaceAll("-", "/");
+          if (!mounted) return;
+          setState(() {});
+        });
         await Future.delayed(Duration(
             milliseconds: 1000 -
                 DateTime.fromMillisecondsSinceEpoch(await Now(true))
@@ -89,12 +106,6 @@ class _HomePage extends State<HomePage> {
               EEW = false;
             }
           }
-          now = DateTime.fromMillisecondsSinceEpoch(await Now(false))
-              .toString()
-              .substring(0, 19)
-              .replaceAll("-", "/");
-          if (!mounted) return;
-          setState(() {});
         });
       }
     });
@@ -124,6 +135,33 @@ class _HomePage extends State<HomePage> {
                     ),
                   ),
                 ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Visibility(
+              visible: replay != 0,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        elevation: 20,
+                        shape: RoundedRectangleBorder(
+                            //to set border radius to button
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () async {
+                        replay = 0;
+                        prefs.setInt("replay", 0);
+                      },
+                      child: const Text(
+                        "結束重播",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 10),

@@ -62,14 +62,12 @@ Future<List> Earthquake(json) async {
   String city = Loc[0];
   String town = Loc[1];
   double point = sqrt(pow(
-          (loc[city][town][1] +
-                      double.parse(json["lat"].toString()) * -1)
+          (loc[city][town][1] + double.parse(json["lat"].toString()) * -1)
                   .abs() *
               111,
           2) +
       pow(
-          (loc[city][town][2] +
-                      double.parse(json["lon"].toString()) * -1)
+          (loc[city][town][2] + double.parse(json["lon"].toString()) * -1)
                   .abs() *
               101,
           2));

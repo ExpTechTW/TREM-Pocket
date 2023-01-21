@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trem_pocket/view/home.dart';
 
 bool finish = false;
+var prefs;
 
 class ReportPage extends StatefulWidget {
   const ReportPage({Key? key}) : super(key: key);
@@ -23,6 +26,7 @@ class _ReportPage extends State<ReportPage> {
     dynamic data = ModalRoute.of(context)?.settings.arguments;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (finish) return;
+      prefs = await SharedPreferences.getInstance();
       finish = true;
       if (data["report"] != null) {
         for (var i = 0; i < data["report"]["intensity"].length; i++) {
@@ -125,6 +129,39 @@ class _ReportPage extends State<ReportPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        elevation: 20,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () async {
+                        prefs.setInt(
+                            "replay",
+                            DateTime.parse(data["originTime"]
+                                        .toString()
+                                        .replaceAll("/", "-"))
+                                    .millisecondsSinceEpoch -
+                                5000);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomePage(),
+                            ));
+                      },
+                      child: const Text(
+                        "查看重播",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
               Material(
                 color: Colors.black,
                 child: Ink(
