@@ -35,11 +35,7 @@ class _HomePage extends State<HomePage> {
 
   @override
   void dispose() {
-    if (clock != null) {
-      clock.cancel();
-      clock = null;
-    }
-    update = false;
+    _timer_cancel();
     super.dispose();
   }
 
@@ -63,19 +59,31 @@ class _HomePage extends State<HomePage> {
     }
   }
 
+  _timer_cancel() {
+    if (time_clock != null) time_clock.cancel();
+    time_clock = null;
+    if (clock != null) clock.cancel();
+    clock = null;
+    update = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       prefs = await SharedPreferences.getInstance();
       if (replay == 0) replay = prefs.getInt("replay") ?? 0;
-      if (clock == null) {
+      if (time_clock == null) {
         time_clock =
             Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+          print(await Now(false));
           now = DateTime.fromMillisecondsSinceEpoch(await Now(false))
               .toString()
               .substring(0, 19)
               .replaceAll("-", "/");
-          if (!mounted) return;
+          if (!mounted) {
+            _timer_cancel();
+            return;
+          }
           setState(() {});
         });
         await Future.delayed(Duration(
