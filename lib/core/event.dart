@@ -101,11 +101,11 @@ void OnData(Map _data, String Sender) async {
         .substring(data["location"].toString().indexOf("(") + 1,
             data["location"].toString().indexOf(")"))
         .replaceAll("位於", "");
-    if(data["location"].toString().startsWith("地震資訊")) {
+    if (data["location"].toString().startsWith("地震資訊")) {
       await flutterLocalNotificationsPlugin.show(5, '地震資訊 | ${data["UTC+8"]}',
           "$loc 發生規模 ${data["scale"]} 地震", notificationDetails,
           payload: '');
-    }else {
+    } else {
       await flutterLocalNotificationsPlugin.show(5, '地震報告 | ${data["UTC+8"]}',
           "$loc 發生規模 ${data["scale"]} 有感地震", notificationDetails,
           payload: '');
