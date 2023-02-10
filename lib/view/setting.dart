@@ -183,7 +183,7 @@ class _SettingPage extends State<SettingPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  "TREM 人工定位",
+                                  "地震資訊",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 25),
                                 ),
@@ -191,7 +191,7 @@ class _SettingPage extends State<SettingPage> {
                                   children: [
                                     const Expanded(
                                       child: Text(
-                                        "接收 TREM 人工定位 地震資訊",
+                                        "接收 地震資訊",
                                         style: TextStyle(
                                             color: Colors.grey, fontSize: 20),
                                       ),
